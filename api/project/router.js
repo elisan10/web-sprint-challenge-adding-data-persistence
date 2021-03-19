@@ -12,17 +12,17 @@ const validateProjectName = (req, res, next) => {
   }
 };
 
-// const convertBoolean = (req, res, next) => {
-//   if (req.body.project_completed === false) {
-//     return req.body.project_completed === 0;
-//   } else if (req.body.project_completed === true) {
-//     return req.body.project_completed === 1;
-//   } else if (!req.body.project_completed) {
-//     return req.body.project_completed === null;
-//   } else {
-//     next();
-//   }
-// };
+const convertBoolean = (req, res, next) => {
+  console.log(req.body);
+  if (req.body.project_completed === false) {
+    req.body.project_completed = 0;
+  } else if (req.body.project_completed === true) {
+    req.body.project_completed = 1;
+  }
+  // else if (!req.body.project_completed) {
+  //   return req.body.project_completed === null;
+  next();
+};
 
 router.get("/", (req, res, next) => {
   Project.findAll()
@@ -32,10 +32,10 @@ router.get("/", (req, res, next) => {
     .catch(next);
 });
 
-router.post("/", validateProjectName, (req, res, next) => {
+router.post("/", validateProjectName, convertBoolean, (req, res, next) => {
   Project.add(req.body)
     .then((project) => {
-      res.json(project);
+      res.json(project[0]);
     })
     .catch(next);
 });

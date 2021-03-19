@@ -38,9 +38,40 @@ async function findAll() {
 // 	projects AS p
 // VALUES ("project_name", "project_description", "project_completed")
 
+async function getById(id) {
+  const project = await db("projects").where("project_id", id).first();
+
+  project.project_completed === 0
+    ? (project.project_completed = false)
+    : (project.project_completed = true);
+
+  return project;
+}
+
 async function add(project) {
-  const newProject = await db("projects as p").insert(project);
-  return db("projects as p").where("p.project_id", newProject);
+  const [id] = await db("projects").insert(project);
+  return getById(id);
+  // console.log({ project });
+
+  // const rename = () => {
+  //   if (project.project_completed === false) {
+  //     return (project.project_completed = 0);
+  //   } else if (project.project_completed === true) {
+  //     return (project.project_completed = 1);
+  //   }
+  // };
+
+  // const rename = {
+  //   project_name: project.project_name,
+  //   project_description: project.project_description,
+  //   project_completed: project.project_completed ? 1 : 0,
+  // };
+
+  // const newProject = await db("projects as p").insert(project);
+
+  // console.log(newProject);
+  // // .boolean("project_completed");
+  // return db("projects as p").where("p.project_id", newProject);
 
   // if (project.project_completed === false) {
   //   db("projects as p").insert({

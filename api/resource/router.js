@@ -5,9 +5,31 @@ const Resource = require("./model");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {});
+// const validateProjectName = (req, res, next) => {
+//   if (!req.body.project_name) {
+//     res.status(404).json({ message: "project_name is required" });
+//   } else {
+//     next();
+//   }
+// };
 
-router.post("/", (req, res, next) => {});
+router.get("/", (req, res, next) => {
+  Resource.findAll()
+    .then((resources) => {
+      res.json(resources);
+    })
+    .catch(next);
+});
+
+router.post("/", (req, res, next) => {
+  console.log(req.body);
+  Resource.add(req.body)
+    .then((resource) => {
+      console.log(resource);
+      res.json(resource[0]);
+    })
+    .catch(next);
+});
 
 router.use((err, req, res, next) => {
   // eslint-disable-line

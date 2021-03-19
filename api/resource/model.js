@@ -7,7 +7,9 @@ const db = require("../../data/dbConfig");
 // 	*
 // FROM resources AS r
 
-function findAll() {}
+async function findAll() {
+  return await db("resources as r").select("r.*");
+}
 
 // Query for POST response
 
@@ -15,7 +17,10 @@ function findAll() {}
 // 	resources AS r
 // VALUES ("resource_name", "resource_description")
 
-function add() {}
+async function add(resource) {
+  const newResource = await db("resources as r").insert(resource);
+  return db("resources as r").where("r.resource_id", newResource);
+}
 
 module.exports = {
   findAll,
